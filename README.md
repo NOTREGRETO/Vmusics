@@ -1,30 +1,165 @@
-# 3D Gallery Photography Template
+# Interactive 3D Infinite Gallery
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+An immersive, interactive 3D gallery experience that showcases images in a beautiful infinite scrolling environment. Built with React Three Fiber, Three.js, and Next.js, this project features custom shader materials, smooth animations, and an elegant cloth-like visual effect.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/creamemepied-6817s-projects/v0-3-d-gallery-photography-template)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/If5HL25dO8S)
+![Interactive 3D Gallery](https://img.shields.io/badge/Status-Live-success)
+![Next.js](https://img.shields.io/badge/Next.js-15.5-black)
+![React Three Fiber](https://img.shields.io/badge/React%20Three%20Fiber-Latest-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 
-## Overview
+## ✨ Features
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+- **Infinite 3D Scrolling**: Seamlessly navigate through images in a three-dimensional space
+- **Custom Shader Materials**: Beautiful cloth-like effects with dynamic curving and rippling animations
+- **Interactive Controls**: 
+  - Mouse wheel scrolling
+  - Keyboard navigation (Arrow keys)
+  - Touch support for mobile devices
+- **Auto-play Mode**: Automatically resumes scrolling after 3 seconds of inactivity
+- **Dynamic Blur & Fade**: Smooth depth-of-field effects that enhance the 3D experience
+- **Spatial Distribution**: Images are intelligently positioned in 3D space using golden angle distribution
+- **Hover Effects**: Flag-like waving animation when hovering over images
+- **WebGL Fallback**: Graceful degradation for devices without WebGL support
+- **Responsive Design**: Works beautifully on desktop, tablet, and mobile devices
 
-## Deployment
+## 🚀 Getting Started
 
-Your project is live at:
+### Prerequisites
 
-**[https://vercel.com/creamemepied-6817s-projects/v0-3-d-gallery-photography-template](https://vercel.com/creamemepied-6817s-projects/v0-3-d-gallery-photography-template)**
+- Node.js 18+ 
+- npm, yarn, or pnpm
 
-## Build your app
+### Installation
 
-Continue building your app on:
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd Interactive-Gallery-Portfolio/Interactive-Gallery-Portfolio
+```
 
-**[https://v0.app/chat/If5HL25dO8S](https://v0.app/chat/If5HL25dO8S)**
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
 
-## How It Works
+3. Run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Building for Production
+
+```bash
+npm run build
+npm start
+```
+
+## 🎨 Customization
+
+### Adding Your Images
+
+Place your images in the `public/` directory and update the `sampleImages` array in `app/page.tsx`:
+
+```typescript
+const sampleImages = [
+  { src: '/your-image-1.webp', alt: 'Description 1' },
+  { src: '/your-image-2.webp', alt: 'Description 2' },
+  // Add more images...
+];
+```
+
+### Configuring Gallery Settings
+
+The `InfiniteGallery` component accepts several props for customization:
+
+```typescript
+<InfiniteGallery
+  images={sampleImages}
+  speed={1.2}              // Scroll speed multiplier
+  zSpacing={3}             // Spacing between images along Z-axis
+  visibleCount={12}        // Number of visible image planes
+  falloff={{              // Opacity falloff distances
+    near: 0.8,
+    far: 14
+  }}
+  fadeSettings={{         // Custom fade in/out ranges
+    fadeIn: { start: 0.05, end: 0.15 },
+    fadeOut: { start: 0.85, end: 0.95 }
+  }}
+  blurSettings={{         // Custom blur settings
+    blurIn: { start: 0.0, end: 0.1 },
+    blurOut: { start: 0.9, end: 1.0 },
+    maxBlur: 3.0
+  }}
+/>
+```
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) with App Router
+- **3D Rendering**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) & [Three.js](https://threejs.org/)
+- **3D Utilities**: [@react-three/drei](https://github.com/pmndrs/drei)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Fonts**: Geist Mono & Instrument Serif
+
+## 📁 Project Structure
+
+```
+Interactive-Gallery-Portfolio/
+├── app/
+│   ├── layout.tsx          # Root layout with metadata
+│   ├── page.tsx            # Main page component
+│   └── globals.css         # Global styles
+├── components/
+│   ├── InfiniteGallery.tsx # Main 3D gallery component
+│   └── theme-provider.tsx  # Theme context provider
+├── lib/
+│   └── utils.ts           # Utility functions
+├── public/                # Static assets (images)
+└── styles/
+    └── globals.css        # Additional global styles
+```
+
+## 🎯 Key Implementation Details
+
+### Custom Shader Materials
+
+The gallery uses custom GLSL shaders to create:
+- **Cloth-like curving**: Images curve naturally based on scroll velocity
+- **Ripple effects**: Subtle cloth-like ripples that respond to movement
+- **Flag waving**: Hover effects that create a flag-like waving motion
+- **Dynamic blur**: Depth-based blur that enhances the 3D effect
+
+### Spatial Distribution Algorithm
+
+Images are positioned using a golden angle distribution pattern, ensuring natural and visually pleasing spacing in 3D space.
+
+### Performance Optimizations
+
+- Material pooling to minimize object creation
+- Efficient texture loading with `useTexture` hook
+- Optimized render loop with `useFrame`
+- WebGL support detection with graceful fallback
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+Built with love using amazing open-source libraries. Special thanks to the React Three Fiber and Three.js communities for their incredible work.
+
+---
+
+For questions, suggestions, or contributions, please open an issue or submit a pull request.
