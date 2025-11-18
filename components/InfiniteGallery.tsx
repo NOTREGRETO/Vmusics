@@ -321,16 +321,53 @@ function GalleryScene({
 
 	useEffect(() => {
 		const canvas = document.querySelector('canvas');
-		if (canvas) {
-			canvas.addEventListener('wheel', handleWheel, { passive: false });
-			document.addEventListener('keydown', handleKeyDown);
-
-			return () => {
-				canvas.removeEventListener('wheel', handleWheel);
-				document.removeEventListener('keydown', handleKeyDown);
-			};
+		if (!canvas) {
+			return;
 		}
-	}, [handleWheel, handleKeyDown]);
+
+		let lastTouchY: number | null = null;
+
+		const handleTouchStart = (event: TouchEvent) => {
+			lastTouchY = event.touches[0]?.clientY ?? null;
+			setAutoPlay(false);
+			lastInteraction.current = Date.now();
+		};
+
+		const handleTouchMove = (event: TouchEvent) => {
+			if (lastTouchY === null) {
+				return;
+			}
+
+			const currentY = event.touches[0]?.clientY ?? lastTouchY;
+			const deltaY = lastTouchY - currentY;
+
+			if (deltaY !== 0) {
+				event.preventDefault();
+				setScrollVelocity((prev) => prev + deltaY * 0.01 * speed);
+				lastInteraction.current = Date.now();
+			}
+
+			lastTouchY = currentY;
+		};
+
+		const handleTouchEnd = () => {
+			lastTouchY = null;
+		};
+
+		canvas.addEventListener('wheel', handleWheel, { passive: false });
+		canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+		canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+		canvas.addEventListener('touchend', handleTouchEnd);
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			canvas.removeEventListener('wheel', handleWheel);
+			canvas.removeEventListener('touchstart', handleTouchStart);
+			canvas.removeEventListener('touchmove', handleTouchMove);
+			canvas.removeEventListener('touchend', handleTouchEnd);
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [handleWheel, handleKeyDown, speed]);
 
 	// Auto-play logic
 	useEffect(() => {
