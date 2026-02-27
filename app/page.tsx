@@ -24,13 +24,13 @@ export default function Home() {
 	);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const [shouldAttemptPlay, setShouldAttemptPlay] = useState(false);
-    const { isIframe } = useIframe();
+	const { isIframe } = useIframe();
 
-    useEffect(() => {
-        if (isIframe) {
-            setPortfolioText("damnnn");
-        }
-    }, [isIframe]);
+	useEffect(() => {
+		if (isIframe) {
+			setPortfolioText("damnnn");
+		}
+	}, [isIframe]);
 
 	const handleSave = (
 		text: string,
@@ -119,6 +119,15 @@ export default function Home() {
 
 	return (
 		<main className="min-h-screen">
+			<video
+				autoPlay
+				loop
+				muted
+				playsInline
+				className="fixed inset-0 w-full h-full object-cover -z-10"
+			>
+				<source src="/background-video.mp4" type="video/mp4" />
+			</video>
 			<InfiniteGallery
 				images={images}
 				speed={1.2}
